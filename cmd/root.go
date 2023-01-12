@@ -68,6 +68,7 @@ func providerImporterSubcommands() []func(options ImportOptions) *cobra.Command 
 		newCmdNewRelicImporter,
 		newCmdGrafanaImporter,
 		// Community
+		newCmdOktaImporter,
 		newCmdLogzioImporter,
 		newCmdCommercetoolsImporter,
 		newCmdMikrotikImporter,

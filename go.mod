@@ -91,7 +91,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/wafregional v1.2.1
 	github.com/aws/aws-sdk-go-v2/service/workspaces v1.2.1
 	github.com/aws/aws-sdk-go-v2/service/xray v1.2.1
-	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/cloudflare/cloudflare-go v0.13.6
 	github.com/cloudfoundry/jibber_jabber v0.0.0-20151120183258-bcc4c8345a21 // indirect
 	github.com/ddelnano/terraform-provider-mikrotik/client v0.0.0-20210401060029-7f652169b2c4
@@ -107,8 +106,8 @@ require (
 	github.com/grafana/grafana-api-golang-client v0.0.0-20210218192924-9ccd2365d2a6
 	github.com/hashicorp/go-azure-helpers v0.14.0
 	github.com/hashicorp/go-cleanhttp v0.5.2
-	github.com/hashicorp/go-hclog v0.15.0
-	github.com/hashicorp/go-plugin v1.4.1
+	github.com/hashicorp/go-hclog v1.4.0
+	github.com/hashicorp/go-plugin v1.4.4
 	github.com/hashicorp/hcl v1.0.0
 	github.com/hashicorp/terraform v0.15.0
 	github.com/heroku/heroku-go/v5 v5.1.0
@@ -120,6 +119,8 @@ require (
 	github.com/linode/linodego v0.24.1
 	github.com/nicksnyder/go-i18n v1.10.1 // indirect
 	github.com/ns1/ns1-go v2.4.0+incompatible
+	github.com/okta/okta-sdk-golang/v2 v2.16.0
+	github.com/okta/terraform-provider-okta v0.0.0-20230109232241-f9d5e952bf5c
 	github.com/packethost/packngo v0.9.0
 	github.com/paultyng/go-newrelic/v4 v4.10.0
 	github.com/pkg/errors v0.9.1
@@ -130,13 +131,13 @@ require (
 	github.com/vultr/govultr v0.5.0
 	github.com/yandex-cloud/go-genproto v0.0.0-20200722140432-762fe965ce77
 	github.com/yandex-cloud/go-sdk v0.0.0-20200722140627-2194e5077f13
-	github.com/zclconf/go-cty v1.8.3
+	github.com/zclconf/go-cty v1.10.0
 	github.com/zorkian/go-datadog-api v2.30.0+incompatible
 	golang.org/x/oauth2 v0.0.0-20210218202405-ba52d332ba99
-	golang.org/x/text v0.3.5
+	golang.org/x/text v0.3.7
 	gonum.org/v1/gonum v0.7.0
 	google.golang.org/api v0.40.0
-	google.golang.org/genproto v0.0.0-20210226172003-ab064af71705
+	google.golang.org/genproto v0.0.0-20211029142109-e255c875f7c7
 	gopkg.in/jarcoal/httpmock.v1 v1.0.0-00010101000000-000000000000 // indirect
 	k8s.io/apimachinery v0.19.1
 	k8s.io/client-go v10.0.0+incompatible

@@ -16,12 +16,13 @@ package terraformutils
 
 import (
 	"fmt"
-	"github.com/zclconf/go-cty/cty/convert"
 	"log"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/zclconf/go-cty/cty/convert"
 
 	"github.com/hashicorp/terraform/addrs"
 	"github.com/hashicorp/terraform/states"
@@ -38,6 +39,7 @@ type Resource struct {
 	ImportID          string // identifier to be used by terraformer when importing a resource
 	Provider          string
 	PriorState        map[string]string      // used when refreshing a resource
+	Item              map[string]interface{} `json:",omitempty"`
 	IgnoreKeys        []string               `json:",omitempty"`
 	AllowEmptyValues  []string               `json:",omitempty"`
 	AdditionalFields  map[string]interface{} `json:",omitempty"`
