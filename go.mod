@@ -117,6 +117,7 @@ require (
 	github.com/jonboydell/logzio_client v1.2.0
 	github.com/labd/commercetools-go-sdk v0.3.1
 	github.com/linode/linodego v0.24.1
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/nicksnyder/go-i18n v1.10.1 // indirect
 	github.com/ns1/ns1-go v2.4.0+incompatible
 	github.com/okta/okta-sdk-golang/v2 v2.16.0

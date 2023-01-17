@@ -29,12 +29,19 @@ type AppBookmarkGenerator struct {
 func (g AppBookmarkGenerator) createResources(ctx context.Context, client *okta.Client, appList []*okta.Application) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, app := range appList {
+		appPolicyId, err := getApplicationPolicy(ctx, client, app)
+		if err != nil {
+			panic(err)
+		}
+
 		r := terraformutils.NewResource(
 			app.Id,
-			normalizeResourceName(app.Id+"_"+app.Name),
+			normalizeResourceName(app.Id+"_"+app.Label),
 			"okta_app_bookmark",
 			"okta",
-			map[string]string{},
+			map[string]string{
+				"authentication_policy": appPolicyId,
+			},
 			[]string{},
 			map[string]interface{}{})
 		r.IgnoreKeys = append(r.IgnoreKeys, "^groups", "^users")
@@ -57,7 +64,7 @@ func (g AppBookmarkGenerator) initBookmarkGroups(ctx context.Context, client *ok
 		groupName := output.Profile.Name
 		r := terraformutils.NewResource(
 			app.Id,
-			normalizeResourceName(app.Id+"_"+app.Name+"__"+groupID+"_"+groupName),
+			normalizeResourceName(app.Id+"_"+app.Label+"__"+groupID+"_"+groupName),
 			"okta_app_group_assignment",
 			"okta",
 			map[string]string{

@@ -29,12 +29,19 @@ type AppOAuthGenerator struct {
 func (g AppOAuthGenerator) createResources(ctx context.Context, client *okta.Client, appList []*okta.Application) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, app := range appList {
+		appPolicyId, err := getApplicationPolicy(ctx, client, app)
+		if err != nil {
+			panic(err)
+		}
+
 		r := terraformutils.NewResource(
 			app.Id,
-			normalizeResourceName(app.Id+"_"+app.Name),
+			normalizeResourceName(app.Id+"_"+app.Label),
 			"okta_app_oauth",
 			"okta",
-			map[string]string{},
+			map[string]string{
+				"authentication_policy": appPolicyId,
+			},
 			[]string{},
 			map[string]interface{}{})
 		r.IgnoreKeys = append(r.IgnoreKeys, "^groups", "^users")
