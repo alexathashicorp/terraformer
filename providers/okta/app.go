@@ -132,6 +132,5 @@ func getApplicationPolicy(ctx context.Context, client *okta.Client, app *okta.Ap
 		return "", fmt.Errorf("not a URL: %w", err)
 	}
 
-	fmt.Printf("Input: %v\nResult: %v\n", input, result)
 	return strings.TrimPrefix(parsedUrl.Path, "/api/v1/policies/"), nil
 }
