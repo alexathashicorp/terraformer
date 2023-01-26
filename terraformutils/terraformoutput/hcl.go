@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
+//	http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,15 +14,15 @@
 package terraformoutput
 
 import (
-	"github.com/hashicorp/terraform/addrs"
-	"github.com/hashicorp/terraform/states"
 	"io/ioutil"
 	"log"
 	"os"
 	"strings"
 
+	"github.com/hashicorp/terraform/addrs"
+	"github.com/hashicorp/terraform/states"
+
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
-	"github.com/GoogleCloudPlatform/terraformer/terraformutils/providerwrapper"
 )
 
 func OutputHclFiles(resources []terraformutils.Resource, provider terraformutils.ProviderGenerator, path string, serviceName string, isCompact bool, output string) error {
@@ -31,13 +31,13 @@ func OutputHclFiles(resources []terraformutils.Resource, provider terraformutils
 	}
 	// create provider file
 	providerData := provider.GetProviderData()
-	providerData["terraform"] = map[string]interface{}{
-		"required_providers": []map[string]interface{}{{
-			provider.GetName(): []map[string]interface{}{{
-				"version": providerwrapper.GetProviderVersion(provider.GetName()),
-			}},
-		}},
-	}
+	// providerData["terraform"] = map[string]interface{}{
+	// 	"required_providers": []map[string]interface{}{{
+	// 		provider.GetName(): []map[string]interface{}{{
+	// 			"version": providerwrapper.GetProviderVersion(provider.GetName()),
+	// 		}},
+	// 	}},
+	// }
 
 	providerDataFile, err := terraformutils.Print(providerData, map[string]struct{}{}, output, false)
 	if err != nil {

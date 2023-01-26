@@ -32,10 +32,13 @@ type OktaProvider struct { //nolint
 
 func (p *OktaProvider) GetProviderData(arg ...string) map[string]interface{} {
 	return map[string]interface{}{
-		"provider": map[string]interface{}{
-			"okta": map[string]interface{}{
-				"version": providerwrapper.GetProviderVersion(p.GetName()),
-			},
+		"terraform": map[string]interface{}{
+			"required_providers": []map[string]interface{}{{
+				"okta": []map[string]interface{}{{
+					"version": providerwrapper.GetProviderVersion(p.GetName()),
+					"source":  p.GetProviderSource().Type + "/" + p.GetProviderSource().Namespace,
+				}},
+			}},
 		},
 	}
 }
