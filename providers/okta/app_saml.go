@@ -42,6 +42,8 @@ func (g AppSamlGenerator) createResourcesApp(ctx context.Context, client *okta.C
 			"okta",
 			map[string]string{
 				"authentication_policy": appPolicyId,
+				"skip_users":            "true",
+				"skip_groups":           "true",
 			},
 			[]string{},
 			map[string]interface{}{})

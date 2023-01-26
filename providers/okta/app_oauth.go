@@ -41,6 +41,8 @@ func (g AppOAuthGenerator) createResources(ctx context.Context, client *okta.Cli
 			"okta",
 			map[string]string{
 				"authentication_policy": appPolicyId,
+				"skip_users":            "true",
+				"skip_groups":           "true",
 			},
 			[]string{},
 			map[string]interface{}{})
