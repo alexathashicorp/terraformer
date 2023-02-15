@@ -31,13 +31,20 @@ func (g AppSignOnPolicyGenerator) createResources(AppSignOnPolicyList []*okta.Po
 	for _, signOnPolicy := range AppSignOnPolicyList {
 		resourceName := normalizeResourceName(signOnPolicy.Name)
 		resourceType := "okta_app_signon_policy"
-
-		resources = append(resources, terraformutils.NewSimpleResource(
+		r := terraformutils.NewResource(
 			signOnPolicy.Id,
 			"app_policy_signon_"+resourceName,
 			resourceType,
 			"okta",
-			[]string{}))
+			map[string]string{
+				"description": signOnPolicy.Description,
+			},
+			[]string{
+				"description",
+			},
+			map[string]interface{}{},
+		)
+		resources = append(resources, r)
 	}
 	return resources
 }

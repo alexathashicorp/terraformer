@@ -16,6 +16,7 @@ package okta
 
 import (
 	"context"
+	"log"
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
 	"github.com/okta/okta-sdk-golang/v2/okta"
@@ -25,15 +26,32 @@ type AppSWAGenerator struct {
 	OktaService
 }
 
-func (g AppSWAGenerator) createResources(appList []*okta.Application) []terraformutils.Resource {
+func (g AppSWAGenerator) createResources(ctx context.Context, client *okta.Client, appList []*okta.Application) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, app := range appList {
-		resources = append(resources, terraformutils.NewSimpleResource(
+		appPolicyId, err := getApplicationPolicy(ctx, client, app)
+		if err != nil {
+			panic(err)
+		}
+
+		r := terraformutils.NewResource(
 			app.Id,
 			normalizeResourceName(app.Id+"_"+app.Name),
 			"okta_app_swa",
 			"okta",
-			[]string{}))
+			map[string]string{
+				"authentication_policy": appPolicyId,
+				"skip_users":            "true",
+				"skip_groups":           "true",
+			},
+			[]string{},
+			map[string]interface{}{},
+		)
+		r.IgnoreKeys = append(r.IgnoreKeys, "^groups", "^users")
+		groups := g.initSWAGroups(ctx, client, app)
+		r.SlowQueryRequired = true
+		resources = append(resources, r)
+		resources = append(resources, groups...)
 	}
 	return resources
 }
@@ -49,7 +67,7 @@ func (g *AppSWAGenerator) InitResources() error {
 		return err
 	}
 
-	g.Resources = g.createResources(apps)
+	g.Resources = g.createResources(ctx, client, apps)
 	return nil
 }
 
@@ -61,11 +79,40 @@ func getSWAApplications(ctx context.Context, client *okta.Client) ([]*okta.Appli
 	}
 
 	swaApps := []*okta.Application{}
-	for _, app := range apps {
-		if app.Name == "template_swa" {
-			swaApps = append(swaApps, app)
-		}
-	}
+	swaApps = append(swaApps, apps...)
 
 	return swaApps, nil
+}
+
+func (g AppSWAGenerator) initSWAGroups(ctx context.Context, client *okta.Client, app *okta.Application) []terraformutils.Resource {
+	groupsIDs, err := listApplicationGroupsIDs(ctx, client, app.Id)
+	if err != nil {
+		log.Println(err)
+	}
+	var resources []terraformutils.Resource
+	for _, groupID := range groupsIDs {
+		output, _, _ := client.Group.GetGroup(ctx, groupID)
+		groupName := output.Profile.Name
+		r := terraformutils.NewResource(
+			app.Id,
+			normalizeResourceName(app.Id+"_"+app.Label+"__"+groupID+"_"+groupName),
+			"okta_app_group_assignment",
+			"okta",
+			map[string]string{
+				"group_id": groupID,
+				"app_id":   app.Id,
+			},
+			[]string{},
+			map[string]interface{}{})
+		r.SlowQueryRequired = true
+		resources = append(resources, r)
+	}
+	return resources
+}
+
+func (g *AppSWAGenerator) PostConvertHook() error {
+	for i := range g.Resources {
+		g.Resources[i].Item = replaceParams(g.Resources[i].Item)
+	}
+	return nil
 }

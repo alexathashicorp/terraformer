@@ -29,8 +29,7 @@ func (g AppSignOnPolicyRuleGenerator) createResources(signOnPolicyRuleList []sdk
 	for _, policyRule := range signOnPolicyRuleList {
 		resourceName := "policyrule_signon_" + normalizeResourceName(policyName+"_"+policyRule.Name)
 		resourceType := "okta_app_signon_policy_rule"
-
-		resources = append(resources, terraformutils.NewResource(
+		r := terraformutils.NewResource(
 			policyRule.Id,
 			resourceName,
 			resourceType,
@@ -38,9 +37,12 @@ func (g AppSignOnPolicyRuleGenerator) createResources(signOnPolicyRuleList []sdk
 			map[string]string{
 				"policy_id": policyID,
 			},
-			[]string{},
+			[]string{
+				"inactivity_period",
+			},
 			map[string]interface{}{},
-		))
+		)
+		resources = append(resources, r)
 	}
 
 	return resources

@@ -34,12 +34,17 @@ func (g MFAPolicyGenerator) createResources(mfaPolicyList []*okta.Policy) []terr
 		if mfaPolicy.Name == "Default Policy" {
 			resourceType = "okta_policy_mfa_default"
 		}
-		resources = append(resources, terraformutils.NewSimpleResource(
+		r := terraformutils.NewResource(
 			mfaPolicy.Id,
 			"policy_mfa_"+resourceName,
 			resourceType,
 			"okta",
-			[]string{}))
+			map[string]string{},
+			[]string{},
+			map[string]interface{}{},
+		)
+		r.IgnoreKeys = append(r.IgnoreKeys, "consent_type")
+		resources = append(resources, r)
 	}
 	return resources
 }
